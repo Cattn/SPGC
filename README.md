@@ -17,6 +17,9 @@ This project aims to allow students to manipulate their grades graphically withi
 8. Head to your SIS and enjoy!
 
 ## F&Q
+#### How do I disable it?
+- You can disable the extension by clicking on the extension icon in the extension bar, then toggling the disable button off.
+
 Need additional help with navigating the UI? Watch the demo video!
 
 ## Contributors
