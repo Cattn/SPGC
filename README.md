@@ -18,7 +18,7 @@ This project aims to allow students to manipulate their grades graphically withi
 
 ## F&Q
 #### What's the point?
-- Have you ever wanted to see what your grade would look like if you turned something in? If a grade got added? If you missed something?, Well you can check all of that with this extension!
+- Have you ever wanted to see what your grade would look like if you turned something in? If a grade got added? If you missed something? Well you can check all of that with this extension!
 #### How do I disable it?
 - You can disable the extension by clicking on the extension icon in the extension bar, then toggling the enable button off.
 
