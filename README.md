@@ -18,7 +18,7 @@ This project aims to allow students to manipulate their grades graphically withi
 
 ## F&Q
 #### How do I disable it?
-- You can disable the extension by clicking on the extension icon in the extension bar, then toggling the disable button off.
+- You can disable the extension by clicking on the extension icon in the extension bar, then toggling the enable button off.
 
 #### Help! I have an issue
 - You can contact me with any issues at ``Logan@cattn.dev`` or on discord ``cattn.``
