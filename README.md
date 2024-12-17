@@ -12,7 +12,7 @@ This project aims to allow students to manipulate their grades graphically withi
 3. Head to ``chrome://extensions``
 4. Enable Developer Mode
 5. Click ``Load Unpacked``
-6. Select the folder of this repository that contains the "scripts" folder.
+6. Select the folder (it will likely be ``/SPGC-main/SPGC-main/``)
 7. Ensure the added Extension is enabled
 8. Head to your SIS and enjoy!
 
