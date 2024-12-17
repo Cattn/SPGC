@@ -5,20 +5,24 @@ let weightNames = [];
 let weightPercentages = [];
 let categories = [];
 let maxPoints = [];
+let addedRows = [];
 
 function printAllPoints() {
-    const rows = document.querySelectorAll(".dataTable-tbody .dataTable-row");
+    let rows = document.querySelectorAll(".dataTable-tbody .dataTable-row");
     points = [];
     totalPoints = 0;
     categories = [];
+    rows = Array.from(rows).filter(row => !!row.querySelector(".points-cell"));
+    console.log(rows);
     rows.forEach(row => {
         const pointsCell = row.querySelector(".points-cell");
         if (pointsCell) {
             pointsCell.contentEditable = "true";
             const rawText = pointsCell.textContent.trim();
             const match = rawText.match(/([\d.]+)\s*\/\s*(\d+)/);
-
             if (match) {
+                console.log(parseFloat(match[1]));
+                console.log(parseInt(match[2]));
                 points.push(parseFloat(match[1]));
                 totalPoints += parseInt(match[2]);
                 if (weighted) {
@@ -31,6 +35,7 @@ function printAllPoints() {
                 }
             } else {
                 console.log(`No valid match found for: ${rawText}`);
+                console.log(pointsCell);
             } 
         }
     });
@@ -39,6 +44,66 @@ function printAllPoints() {
     } else {
       printCalculation();
     }
+}
+
+
+function newRowCreator() {
+  const tBody = document.querySelector("body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.grades-grid-container.student-assignments-container > div > div > div.dataTable-scroll.printStretch > table > tbody");
+
+  if (tBody) {
+    const newRow = document.createElement("tr");
+    newRow.setAttribute("class", "dataTable-row dataTable-recordRow dataTable-oddRow");
+    const newRowText = document.createElement("td");
+    newRowText.setAttribute("class", "tacky-left highlightable-container dataTable-recordColumn tacky-left-origin");
+    newRowText.textContent = "Add New Row:";
+
+    const newPointsCell = document.createElement("td");
+    newPointsCell.setAttribute("class", "tacky-left points-cell highlightable-container primary-grade-cell dataTable-recordColumn tacky-left-origin");
+    newPointsCell.setAttribute("contenteditable", "true");
+
+    const newCategoryCell = document.createElement("td");
+    newCategoryCell.setAttribute("class", "record input dataTable-recordColumn data-field-category_title");
+    newCategoryCell.setAttribute("contenteditable", "true");
+
+    const blankCell = document.createElement("td");
+    blankCell.setAttribute("class", "tacky-left highlightable-container dataTable-recordColumn tacky-left-origin");
+
+    const pointText = document.createElement("td");
+    pointText.setAttribute("class", "tacky-left highlightable-container dataTable-recordColumn tacky-left-origin");
+    pointText.textContent = "Points:";
+
+    const categoryText = document.createElement("td");
+    categoryText.setAttribute("class", "tacky-left highlightable-container dataTable-recordColumn tacky-left-origin");
+    categoryText.textContent = "Category:";
+
+    const button = document.createElement("button");
+    button.textContent = "Add Another Row";
+
+    const removeButton = document.createElement("button");
+    removeButton.textContent = "Remove Row";
+
+    newRow.appendChild(newRowText);
+    newRow.appendChild(blankCell);
+    newRow.appendChild(pointText);
+    newRow.appendChild(newPointsCell);
+    newRow.appendChild(categoryText);
+    newRow.appendChild(newCategoryCell);
+    tBody.appendChild(newRow);
+    newRow.appendChild(button);
+
+    addedRows.push(newRow);
+
+    button.addEventListener("click", () => {
+      button.remove();
+      newRow.appendChild(removeButton);
+      newRowCreator();
+    });
+
+    removeButton.addEventListener("click", () => {
+      newRow.remove();
+      addedRows = addedRows.filter(row => row !== newRow);
+    });
+  }
 }
 
 function reCalculateButton() {
@@ -111,9 +176,15 @@ function printWeightedCalculation() {
     div.innerHTML += `<br><strong>Overall Weighted Grade: ${overallGrade}%</strong>`;
 
     container.appendChild(div);
+    console.log(weightedScores);
+    console.log(weightNames);
+    console.log(weightPercentages);
+    console.log(categoryPoints);
+    console.log(categoryMaxPoints);
   } else {
     console.log("Container not found. Exiting function.");
   }
+
 }
 
 
@@ -154,6 +225,8 @@ function checkWeighted() {
 
 
 
+
+
 // Detect ClassName/Page Load
 const observer = new MutationObserver(() => {
     const selectElement = document.querySelector("body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.grid-top-buttons > div > div.gradebook-grid-title-container > div.student-gb-grades-course-container > select");
@@ -164,6 +237,7 @@ const observer = new MutationObserver(() => {
             checkWeighted();
             printAllPoints();
             reCalculateButton();
+            newRowCreator();
             observer.disconnect();
         }
         selectElement.addEventListener('change', (event) => {
