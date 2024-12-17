@@ -1,10 +1,16 @@
 let points = [];
 let totalPoints = 0;
+let weighted = false;
+let weightNames = [];
+let weightPercentages = [];
+let categories = [];
+let maxPoints = [];
 
 function printAllPoints() {
     const rows = document.querySelectorAll(".dataTable-tbody .dataTable-row");
     points = [];
     totalPoints = 0;
+    categories = [];
     rows.forEach(row => {
         const pointsCell = row.querySelector(".points-cell");
         if (pointsCell) {
@@ -15,18 +21,24 @@ function printAllPoints() {
             if (match) {
                 points.push(parseFloat(match[1]));
                 totalPoints += parseInt(match[2]);
-                console.log(`${match[1]}/${match[2]}`);
+                if (weighted) {
+                  const categoryCell = row.querySelector(".data-field-category_title");
+                  if (categoryCell) {
+                      const category = categoryCell.textContent.trim();
+                      categories.push(category);
+                      maxPoints.push(parseInt(match[2]));
+                  }
+                }
             } else {
                 console.log(`No valid match found for: ${rawText}`);
             } 
         }
     });
-    console.log(`Total Points Earned: ${points.reduce((a, b) => a + b, 0).toFixed(2)}`);
-    console.log(`Total Points Possible: ${totalPoints}`);
-    console.log(`Number of Assignments: ${points.length}`);
-    console.log(`Average Points per assignment: ${(points.reduce((a, b) => a + b, 0) / points.length).toFixed(2)}`);
-    console.log(`Grade: ${((points.reduce((a, b) => a + b, 0) / totalPoints) * 100).toFixed(2)}%`);
-    printCalculation();
+    if (weighted) {
+      printWeightedCalculation();
+    } else {
+      printCalculation();
+    }
 }
 
 function reCalculateButton() {
@@ -60,6 +72,85 @@ function printCalculation() {
     }
 }
 
+function printWeightedCalculation() {
+  const container = document.querySelector(
+    "body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.grid-top-buttons > div > div.gradebook-grid-title-container"
+  );
+
+  if (container) {
+    const existingDiv = container.querySelector("#weightedCalculation");
+    if (existingDiv) {
+      existingDiv.remove();
+    }
+
+    const div = document.createElement("div");
+    div.id = "weightedCalculation";
+
+    const categoryPoints = {};
+    const categoryMaxPoints = {}; 
+    const weightedScores = [];
+
+    categories.forEach((category, index) => {
+      categoryPoints[category] = (categoryPoints[category] || 0) + points[index];
+      categoryMaxPoints[category] = (categoryMaxPoints[category] || 0) + maxPoints[index];
+    });
+
+    div.innerHTML += `<br><strong>Category Grades:</strong><br>`;
+    weightNames.forEach((name, index) => {
+      const totalCategoryPoints = categoryMaxPoints[name] || 1; 
+      const earnedPoints = categoryPoints[name] || 0;
+      const categoryGrade = ((earnedPoints / totalCategoryPoints) * 100).toFixed(2);
+      const weightedScore = (categoryGrade * weightPercentages[index]) / 100;
+      weightedScores.push(weightedScore);
+
+      div.innerHTML += `${name}: ${categoryGrade}% (Weight: ${weightPercentages[index]}%)<br>`;
+    });
+
+    // Calculate overall weighted grade
+    const overallGrade = weightedScores.reduce((a, b) => a + b, 0).toFixed(2);
+    div.innerHTML += `<br><strong>Overall Weighted Grade: ${overallGrade}%</strong>`;
+
+    container.appendChild(div);
+  } else {
+    console.log("Container not found. Exiting function.");
+  }
+}
+
+
+
+
+
+
+function checkWeighted() {
+    const element = document.querySelector("body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.student-gb-grades-weighted-grades-container");
+    if (element) {
+      weighted = true;
+      const tableRow = document.querySelector("body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.student-gb-grades-weighted-grades-container > div > table > tbody > tr:nth-child(1)");
+      if (tableRow) {
+        const weightedCells = tableRow.querySelectorAll("td.student-gb-grades-weighted-grades-cell");
+        if (weightedCells.length > 2) {
+          weightNames = [];
+          for (let i = 1; i < weightedCells.length - 1; i++) {
+            const text = weightedCells[i].innerText.trim();
+            weightNames.push(text);
+          }
+        }
+      }
+    }
+
+    const percentTable = document.querySelector("body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.student-gb-grades-weighted-grades-container > div > table > tbody > tr:nth-child(2)");
+    if (percentTable) {
+      const weightedCells = percentTable.querySelectorAll("td.student-gb-grades-weighted-grades-cell");
+      if (weightedCells.length > 2) {
+        weightPercentages = [];
+        for (let i = 1; i < weightedCells.length - 1; i++) {
+          const text = weightedCells[i].innerText.trim();
+          weightPercentages.push(parseFloat(text));
+        }
+      }
+    }
+  } 
+
 
 
 
@@ -68,7 +159,7 @@ const observer = new MutationObserver(() => {
     const classNames = document.querySelectorAll("body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.grid-top-buttons > div > div.gradebook-grid-title-container > div.student-gb-grades-course-container > select > option");
     const className = Array.from(classNames).find(option => option.selected);
     if (className) {
-      console.log(className.innerHTML);
+      checkWeighted();
       printAllPoints();
       reCalculateButton();
       observer.disconnect();
