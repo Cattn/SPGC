@@ -1,4 +1,23 @@
-const currentState = window.toggleState;
+let isEnabled = true;
+const storedIsEnabled = localStorage.getItem("isEnabled");
+if (storedIsEnabled === null) {
+  localStorage.setItem("isEnabled", true);
+} else {
+  isEnabled = storedIsEnabled === "true";
+}
+
+chrome.runtime.onMessage.addListener((message) => {
+  switch (message) {
+    case "on":
+      isEnabled = true;
+      break;
+    default:
+      isEnabled = false;
+      break;
+  }
+
+  localStorage.setItem("isEnabled", isEnabled);
+});
 
 let points = [];
 let totalPoints = 0;
@@ -223,7 +242,7 @@ function checkWeighted() {
 
 // Detect ClassName/Page Load
 const observer = new MutationObserver(() => {
-    if (!currentState) {
+    if (!isEnabled) {
     const selectElement = document.querySelector("body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.grid-top-buttons > div > div.gradebook-grid-title-container > div.student-gb-grades-course-container > select");
     if (selectElement) {
         const classNames = selectElement.querySelectorAll("option");
@@ -254,7 +273,7 @@ observer.observe(document.documentElement, {
 
 // get rid of dumb anti-tamper
 (function () {
-  if (!currentState) {
+  if (!isEnabled) {
     console.clear = function () {
       console.log("no yapsterpiece in the console");
     };
