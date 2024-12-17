@@ -156,20 +156,28 @@ function checkWeighted() {
 
 // Detect ClassName/Page Load
 const observer = new MutationObserver(() => {
-    const classNames = document.querySelectorAll("body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.grid-top-buttons > div > div.gradebook-grid-title-container > div.student-gb-grades-course-container > select > option");
-    const className = Array.from(classNames).find(option => option.selected);
-    if (className) {
-      checkWeighted();
-      printAllPoints();
-      reCalculateButton();
-      observer.disconnect();
+    const selectElement = document.querySelector("body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.grid-top-buttons > div > div.gradebook-grid-title-container > div.student-gb-grades-course-container > select");
+    if (selectElement) {
+        const classNames = selectElement.querySelectorAll("option");
+        const className = Array.from(classNames).find(option => option.selected);
+        if (className) {
+            checkWeighted();
+            printAllPoints();
+            reCalculateButton();
+            observer.disconnect();
+        }
+        selectElement.addEventListener('change', (event) => {
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        });
     }
-  });
+});
 
-  observer.observe(document.documentElement, {
+observer.observe(document.documentElement, {
     childList: true,
     subtree: true
-  });
+});
 
 
 
