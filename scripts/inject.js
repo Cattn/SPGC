@@ -1,3 +1,5 @@
+const currentState = window.toggleState;
+
 let points = [];
 let totalPoints = 0;
 let weighted = false;
@@ -221,6 +223,7 @@ function checkWeighted() {
 
 // Detect ClassName/Page Load
 const observer = new MutationObserver(() => {
+    if (!currentState) {
     const selectElement = document.querySelector("body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.grid-top-buttons > div > div.gradebook-grid-title-container > div.student-gb-grades-course-container > select");
     if (selectElement) {
         const classNames = selectElement.querySelectorAll("option");
@@ -238,6 +241,7 @@ const observer = new MutationObserver(() => {
             }, 2000);
         });
     }
+  }
 });
 
 observer.observe(document.documentElement, {
@@ -250,6 +254,7 @@ observer.observe(document.documentElement, {
 
 // get rid of dumb anti-tamper
 (function () {
+  if (!currentState) {
     console.clear = function () {
       console.log("no yapsterpiece in the console");
     };
@@ -291,5 +296,6 @@ observer.observe(document.documentElement, {
   
     observer.observe(document.documentElement, { childList: true, subtree: true });
   
+    }
   })();
 
