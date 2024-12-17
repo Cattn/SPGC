@@ -171,7 +171,6 @@ function printWeightedCalculation() {
       div.innerHTML += `${name}: ${categoryGrade}% (Weight: ${weightPercentages[index]}%)<br>`;
     });
 
-    // Calculate overall weighted grade
     const overallGrade = weightedScores.reduce((a, b) => a + b, 0).toFixed(2);
     div.innerHTML += `<br><strong>Overall Weighted Grade: ${overallGrade}%</strong>`;
 
