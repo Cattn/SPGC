@@ -1,0 +1,15 @@
+{
+    "manifest_version": 3,
+    "name": "SPGC",
+    "version": "1.0",
+    "description": "Add and calculate grades on your Student Portal",
+    "content_scripts": [
+        {
+          "js": ["scripts/inject.js"],
+          "matches": [
+            "https://sis.palmbeachschools.org/focus/*"
+          ],
+          "run_at": "document_start"
+        }
+    ]
+}
