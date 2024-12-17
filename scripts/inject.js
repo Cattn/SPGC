@@ -50,6 +50,7 @@ function newRowCreator() {
   if (tBody) {
     const newRow = document.createElement("tr");
     newRow.setAttribute("class", "dataTable-row dataTable-recordRow dataTable-oddRow");
+
     const newRowText = document.createElement("td");
     newRowText.setAttribute("class", "tacky-left highlightable-container dataTable-recordColumn tacky-left-origin");
     newRowText.textContent = "Add New Row:";
@@ -61,9 +62,6 @@ function newRowCreator() {
     const newCategoryCell = document.createElement("td");
     newCategoryCell.setAttribute("class", "record input dataTable-recordColumn data-field-category_title");
     newCategoryCell.setAttribute("contenteditable", "true");
-
-    const blankCell = document.createElement("td");
-    blankCell.setAttribute("class", "tacky-left highlightable-container dataTable-recordColumn tacky-left-origin");
 
     const pointText = document.createElement("td");
     pointText.setAttribute("class", "tacky-left highlightable-container dataTable-recordColumn tacky-left-origin");
@@ -80,7 +78,6 @@ function newRowCreator() {
     removeButton.textContent = "Remove Row";
 
     newRow.appendChild(newRowText);
-    newRow.appendChild(blankCell);
     newRow.appendChild(pointText);
     newRow.appendChild(newPointsCell);
     newRow.appendChild(categoryText);
@@ -110,6 +107,7 @@ function reCalculateButton() {
         if (!submitButton) {
             const button = document.createElement("button");
             button.textContent = "Re-calculate";
+            button.style.marginLeft = "20px";
             button.onclick = printAllPoints;
             container.appendChild(button);
         }
@@ -125,6 +123,7 @@ function printCalculation() {
         }
         const div = document.createElement("div");
         div.id = "calculation";
+        div.style.paddingLeft = "5px";
         div.innerHTML += `<br>Total Points Earned: ${points.reduce((a, b) => a + b, 0).toFixed(2)}<br>
         Total Points Possible: ${totalPoints}<br>
         Number of Assignments: ${points.length}<br>
@@ -147,6 +146,7 @@ function printWeightedCalculation() {
 
     const div = document.createElement("div");
     div.id = "weightedCalculation";
+    div.style.paddingLeft = "5px";
 
    const categoryPoints = {};
     const categoryMaxPoints = {};
@@ -226,9 +226,9 @@ const observer = new MutationObserver(() => {
         const classNames = selectElement.querySelectorAll("option");
         const className = Array.from(classNames).find(option => option.selected);
         if (className) {
+            reCalculateButton();
             checkWeighted();
             printAllPoints();
-            reCalculateButton();
             newRowCreator();
             observer.disconnect();
         }
