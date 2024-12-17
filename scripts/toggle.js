@@ -1,15 +1,25 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const toggle = document.getElementById("toggle");
-    let state = localStorage.getItem("isEnabled") === "true";
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const tab = tabs[0];
+        if (!tab.url.match(/^https:\/\/sis\.palmbeachschools\.org\/focus\//)) {
+            const div = document.createElement("div");
+            div.textContent = "Only use this toggle on SIS.";
+            document.body.appendChild(div);
+            return;
+        }
 
-    console.log(state ? "enabled" : "disabled");
-    toggle.checked = state;
+        const toggle = document.getElementById("toggle");
+        let state = localStorage.getItem("isEnabled") === "true";
 
-    toggle.addEventListener("click", function() {
-        state = !state;
-        localStorage.setItem("isEnabled", state);
-        send(state ? "on" : "off");
         console.log(state ? "enabled" : "disabled");
+        toggle.checked = state;
+
+        toggle.addEventListener("click", function() {
+            state = !state;
+            localStorage.setItem("isEnabled", state);
+            send(state ? "on" : "off");
+            console.log(state ? "enabled" : "disabled");
+        });
     });
 });
 
