@@ -167,7 +167,14 @@ function printCalculation() {
         Number of Assignments: ${points.length}<br>
         Average Points per assignment: ${(points.reduce((a, b) => a + b, 0) / points.length).toFixed(2)}<br>
         Grade: ${((points.reduce((a, b) => a + b, 0) / totalPoints) * 100).toFixed(2)}%<br>`;
+
+        const letterGrade = calculateLetterGrade((points.reduce((a, b) => a + b, 0) / totalPoints) * 100);
+        const mainGradeDiv = document.querySelector("body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.grid-top-buttons > div > div.gradebook-grid-title-container > div.gradebook-grid-title-middle > div");
+        mainGradeDiv.textContent = `Current Grade in Class: ${Math.round((points.reduce((a, b) => a + b, 0) / totalPoints) * 100)}% ${letterGrade}`;
+        mainGradeDiv.setAttribute("data-focus-tooltip", `Current Grade in Class: ${Math.round((points.reduce((a, b) => a + b, 0) / totalPoints) * 100)}% ${letterGrade}`);
+        if (showExtra){
         container.appendChild(div);
+        }
     }
   }
 
