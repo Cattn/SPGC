@@ -1,7 +1,7 @@
 # SPGC
 (Student Portal Grade Calculator)
 
-- [Installation & Demo Video](https://drive.google.com/file/d/1V3zMZSDiG_BGtANtmWf7NdZU4YMp4b59/view?usp=sharing)
+- [Installation & Demo Video](https://drive.google.com/file/d/1AHqCW1o0nqjZG6a7EEaQSCIAKIvxzLhF/view?usp=sharing)
 
 ## About this project
 This project aims to allow students to manipulate their grades graphically within their student portal/information system. This allows for streamlined access to grade prediction and replacement, to allow students to better prioritize the work they need to complete. Currently, this project is limited to ``Palm Beach County School District``, however any other district using "SIS" for their portal, may be able to implement this extension.
@@ -12,7 +12,7 @@ This project aims to allow students to manipulate their grades graphically withi
 3. Head to ``chrome://extensions``
 4. Enable Developer Mode
 5. Click ``Load Unpacked``
-6. Select the folder of this repository that contains the "scripts" folder.
+6. Select the folder (it will likely be ``/SPGC-main/SPGC-main/``)
 7. Ensure the added Extension is enabled
 8. Head to your SIS and enjoy!
 
