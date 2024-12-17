@@ -1,26 +1,21 @@
-let state = false;
+document.addEventListener("DOMContentLoaded", function() {
+    const toggle = document.getElementById("toggle");
+    let state = localStorage.getItem("isEnabled") === "true";
 
-if (localStorage.getItem("isEnabled") === "true") {
-    state = true;
-    console.log("enabled");
-}
-
-
-document.getElementById("toggle").addEventListener("click", function() {
-    state = !state;
-    send(state ? "on" : "off");
-    localStorage.setItem("isEnabled", state);
     console.log(state ? "enabled" : "disabled");
-    this.checked = state;
-});
+    toggle.checked = state;
 
+    toggle.addEventListener("click", function() {
+        state = !state;
+        localStorage.setItem("isEnabled", state);
+        send(state ? "on" : "off");
+        console.log(state ? "enabled" : "disabled");
+    });
+});
 
 const send = (s) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, s);
+        chrome.tabs.sendMessage(tabs[0].id, s);
     });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("toggle").checked = state;
-});

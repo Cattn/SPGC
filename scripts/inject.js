@@ -1,17 +1,10 @@
-let isEnabled = true;
-const storedIsEnabled = localStorage.getItem("isEnabled");
-if (storedIsEnabled === null) {
-  localStorage.setItem("isEnabled", true);
-} else {
-  isEnabled = storedIsEnabled === "true";
-}
-
+let isEnabled = localStorage.getItem("isEnabled") === "true";
 chrome.runtime.onMessage.addListener((message) => {
   switch (message) {
     case "on":
       isEnabled = true;
       break;
-    default:
+    case "off":
       isEnabled = false;
       break;
   }
