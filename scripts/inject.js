@@ -78,7 +78,7 @@ function newRowCreator() {
 
     const newRowText = document.createElement("td");
     newRowText.setAttribute("class", "tacky-left highlightable-container dataTable-recordColumn tacky-left-origin");
-    newRowText.textContent = "Add New Row:";
+    newRowText.textContent = "New Row";
 
     const newPointsCell = document.createElement("td");
     newPointsCell.setAttribute("class", "tacky-left points-cell highlightable-container primary-grade-cell dataTable-recordColumn tacky-left-origin");
