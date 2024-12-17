@@ -24,8 +24,11 @@ This project aims to allow students to manipulate their grades graphically withi
 
 - You can disable the extension by clicking on the extension icon in the extension bar, then toggling the enable button off.
 
+#### Chrome says this is unsafe!
+- Unfortunately an extension like this likely wouldn't be allowed on the web store, so I have decided not to put it there. When you install extensions through this method, you may get warnings or alerts to "Disable" the extensions for security reasons. I would suggest you ignore these if you would like the extension to continue working. The source code of this extension is entirely viewable above and open source. If you have any other questions or concerns, please contact me.
+
 #### Help! I have an issue
-- You can contact me with any issues at ``Logan@cattn.dev`` or on discord ``cattn.``
+- You can contact me with any issues at ``Logan@cattn.dev`` or on discord: ``cattn.``
 
 #### I'm not really sure how to use this
 - Watch the demo video linked above for a video guide!
