@@ -23,7 +23,8 @@ This project aims to allow students to manipulate their grades graphically withi
 #### Help! I have an issue
 - You can contact me with any issues at ``Logan@cattn.dev`` or on discord ``cattn.``
 
-Need additional help with navigating the UI? Watch the demo video!
+#### I'm not really sure how to use this
+- Watch the demo video linked above for a video guide!
 
 ## Contributors
 > Cattn
