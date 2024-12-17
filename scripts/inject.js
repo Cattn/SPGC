@@ -20,6 +20,7 @@ let weightPercentages = [];
 let categories = [];
 let maxPoints = [];
 let addedRows = [];
+let showExtra = true;
 
 function printAllPoints() {
     let rows = document.querySelectorAll(".dataTable-tbody .dataTable-row");
@@ -43,6 +44,16 @@ function printAllPoints() {
                       const category = categoryCell.textContent.trim();
                       categories.push(category);
                       maxPoints.push(parseInt(match[2]));
+                  }
+                  const letterGradeCell = row.querySelector(".student-letter");
+                  if (letterGradeCell) {
+                      const percentage = (points[points.length - 1] / maxPoints[maxPoints.length - 1]) * 100;
+                      letterGradeCell.textContent = calculateLetterGrade(percentage);
+
+                      const percentDiv = row.querySelector(".student-percent");
+                      if (percentDiv) {
+                          percentDiv.textContent = `${Math.round(percentage)}%`;
+                      }
                   }
                 }
             } else {
@@ -121,8 +132,21 @@ function reCalculateButton() {
         if (!submitButton) {
             const button = document.createElement("button");
             button.textContent = "Re-calculate";
-            button.style.marginLeft = "20px";
+            button.style.marginLeft = "5px";
             button.onclick = printAllPoints;
+
+            const hideButton = document.createElement("button");
+            hideButton.textContent = "Hide Extra Details";
+            hideButton.style.marginLeft = "20px";
+            hideButton.onclick = () => {
+                const lastElement = container.lastElementChild;
+                if (lastElement) {
+                    lastElement.remove();
+                    hideButton.remove();
+                    showExtra = false;
+                }
+            };
+            container.appendChild(hideButton);
             container.appendChild(button);
         }
     }
@@ -145,6 +169,20 @@ function printCalculation() {
         Grade: ${((points.reduce((a, b) => a + b, 0) / totalPoints) * 100).toFixed(2)}%<br>`;
         container.appendChild(div);
     }
+  }
+
+function calculateLetterGrade(overallGrade) {
+  if (overallGrade >= 89.5) {
+    return "A";
+  } else if (overallGrade >= 79.5) {
+    return "B";
+  } else if (overallGrade >= 69.5) {
+    return "C";
+  } else if (overallGrade >= 59.5) {
+    return "D";
+  } else {
+    return "F";
+  }
 }
 
 function printWeightedCalculation() {
@@ -177,6 +215,9 @@ function printWeightedCalculation() {
       const weightedPercentage = percentage * (weightPercentages[index] / 100);
       return { percentage, weightedPercentage };
     });
+
+    const scoreRow = document.querySelector("body > div.site-container.sis-package > div.site-middle > div > main > div > section > div.web-page-content > div.web-page-main-content > div.web-page-main-content-fill > div.student-gb-grades-weighted-grades-container > div > table > tbody > tr:nth-child(3)");
+
     
     div.innerHTML += `<br><strong>Category Grades:</strong><br>`;
     weightedScores.forEach((score, index) => {
@@ -185,11 +226,30 @@ function printWeightedCalculation() {
 
     const overallGrade = weightedScores.reduce((a, b) => a + b.weightedPercentage, 0);
     div.innerHTML += `<br><strong>Overall Weighted Grade: ${(overallGrade.toFixed(2))}%</strong>`;
-    container.appendChild(div);
+
+    const letterGrade = calculateLetterGrade(overallGrade);
+    div.innerHTML += `<br><strong>Letter Grade: ${letterGrade}</strong>`;
+
+    if (scoreRow) {
+      const rows = Array.from(scoreRow.querySelectorAll("td")).slice(1, -1);
+      rows.forEach((row, index) => {
+        const totalCategoryPoints = categoryMaxPoints[weightNames[index]] || 1; 
+        const earnedPoints = categoryPoints[weightNames[index]] || 0;
+        const percentage = Math.round((earnedPoints / totalCategoryPoints) * 100);
+        const letterGrade = calculateLetterGrade(percentage);
+        row.textContent = `${earnedPoints}/${totalCategoryPoints} ${percentage}% ${letterGrade}`;
+      });
+      const lastRow = scoreRow.querySelector("td:last-child");
+      const letterGrade = calculateLetterGrade(overallGrade);
+      lastRow.textContent = `${Math.round(overallGrade)}% ${letterGrade}`;
+    }
+
+    if (showExtra) {
+      container.appendChild(div);
+    }
   } else {
     console.log("Container not found. Exiting function.");
   }
-
 
 }
 
