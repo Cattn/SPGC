@@ -1,8 +1,7 @@
 # SPGC
 (Student Portal Grade Calculator)
 
-- Installation Video
-- Demo Video
+- [Installation & Demo Video](https://drive.google.com/file/d/1V3zMZSDiG_BGtANtmWf7NdZU4YMp4b59/view?usp=sharing)
 
 ## About this project
 This project aims to allow students to manipulate their grades graphically within their student portal/information system. This allows for streamlined access to grade prediction and replacement, to allow students to better prioritize the work they need to complete. Currently, this project is limited to ``Palm Beach County School District``, however any other district using "SIS" for their portal, may be able to implement this extension.
