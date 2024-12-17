@@ -12,8 +12,8 @@ function printAllPoints() {
     points = [];
     totalPoints = 0;
     categories = [];
+    maxPoints = [];
     rows = Array.from(rows).filter(row => !!row.querySelector(".points-cell"));
-    console.log(rows);
     rows.forEach(row => {
         const pointsCell = row.querySelector(".points-cell");
         if (pointsCell) {
@@ -21,8 +21,6 @@ function printAllPoints() {
             const rawText = pointsCell.textContent.trim();
             const match = rawText.match(/([\d.]+)\s*\/\s*(\d+)/);
             if (match) {
-                console.log(parseFloat(match[1]));
-                console.log(parseInt(match[2]));
                 points.push(parseFloat(match[1]));
                 totalPoints += parseInt(match[2]);
                 if (weighted) {
@@ -35,7 +33,6 @@ function printAllPoints() {
                 }
             } else {
                 console.log(`No valid match found for: ${rawText}`);
-                console.log(pointsCell);
             } 
         }
     });
@@ -151,38 +148,34 @@ function printWeightedCalculation() {
     const div = document.createElement("div");
     div.id = "weightedCalculation";
 
-    const categoryPoints = {};
-    const categoryMaxPoints = {}; 
-    const weightedScores = [];
-
+   const categoryPoints = {};
+    const categoryMaxPoints = {};
+    
     categories.forEach((category, index) => {
       categoryPoints[category] = (categoryPoints[category] || 0) + points[index];
       categoryMaxPoints[category] = (categoryMaxPoints[category] || 0) + maxPoints[index];
     });
-
-    div.innerHTML += `<br><strong>Category Grades:</strong><br>`;
-    weightNames.forEach((name, index) => {
+    
+    const weightedScores = weightNames.map((name, index) => {
       const totalCategoryPoints = categoryMaxPoints[name] || 1; 
       const earnedPoints = categoryPoints[name] || 0;
-      const categoryGrade = ((earnedPoints / totalCategoryPoints) * 100).toFixed(2);
-      const weightedScore = (categoryGrade * weightPercentages[index]) / 100;
-      weightedScores.push(weightedScore);
-
-      div.innerHTML += `${name}: ${categoryGrade}% (Weight: ${weightPercentages[index]}%)<br>`;
+      const percentage = (earnedPoints / totalCategoryPoints) * 100;
+      const weightedPercentage = percentage * (weightPercentages[index] / 100);
+      return { percentage, weightedPercentage };
+    });
+    
+    div.innerHTML += `<br><strong>Category Grades:</strong><br>`;
+    weightedScores.forEach((score, index) => {
+      div.innerHTML += `${weightNames[index]}: ${score.percentage.toFixed(2)}% (Weighted: ${score.weightedPercentage.toFixed(2)}%, Weight: ${weightPercentages[index]}%)<br>`;
     });
 
-    const overallGrade = weightedScores.reduce((a, b) => a + b, 0).toFixed(2);
-    div.innerHTML += `<br><strong>Overall Weighted Grade: ${overallGrade}%</strong>`;
-
+    const overallGrade = weightedScores.reduce((a, b) => a + b.weightedPercentage, 0);
+    div.innerHTML += `<br><strong>Overall Weighted Grade: ${(overallGrade.toFixed(2))}%</strong>`;
     container.appendChild(div);
-    console.log(weightedScores);
-    console.log(weightNames);
-    console.log(weightPercentages);
-    console.log(categoryPoints);
-    console.log(categoryMaxPoints);
   } else {
     console.log("Container not found. Exiting function.");
   }
+
 
 }
 
@@ -257,7 +250,6 @@ observer.observe(document.documentElement, {
 
 // get rid of dumb anti-tamper
 (function () {
-    const originalConsoleClear = console.clear;
     console.clear = function () {
       console.log("no yapsterpiece in the console");
     };
