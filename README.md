@@ -28,5 +28,8 @@ This project aims to allow students to manipulate their grades graphically withi
 #### I'm not really sure how to use this
 - Watch the demo video linked above for a video guide!
 
+## Contributing
+Want to contribute? Feel free to start a PR or Issue! I am mainly looking for those who want to improve the UI/UX, as the base functionality is mostly complete.
+
 ## Contributors
 > Cattn
