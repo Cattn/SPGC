@@ -45,16 +45,17 @@ function printAllPoints() {
                       categories.push(category);
                       maxPoints.push(parseInt(match[2]));
                   }
-                  const letterGradeCell = row.querySelector(".student-letter");
+                }
+                const letterGradeCell = row.querySelector(".student-letter");
                   if (letterGradeCell) {
-                      const percentage = (points[points.length - 1] / maxPoints[maxPoints.length - 1]) * 100;
+                      const percentage = (parseFloat(match[1]) / parseFloat(match[2])) * 100;
                       letterGradeCell.textContent = calculateLetterGrade(percentage);
 
                       const percentDiv = row.querySelector(".student-percent");
                       if (percentDiv) {
-                          percentDiv.textContent = `${Math.round(percentage)}%`;
+                          const percent = isFinite(percentage) ? `${Math.round(percentage)}%` : "";
+                          percentDiv.textContent = percent;
                       }
-                  }
                 }
             } else {
                 console.log(`No valid match found for: ${rawText}`);
